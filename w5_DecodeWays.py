@@ -37,6 +37,9 @@ def numDecodings(s):
     각 연속개수에 대해 combination을 통해 단순 계산한 뒤 이를 곱해준다.
     Runtime: 52 ms, faster than 6.92% of Python3 online submissions for Decode Ways.
     Memory Usage: 12.9 MB, less than 100.00% of Python3 online submissions for Decode Ways.
+
+    comment: combination을 나중에 한꺼번에 하지 말고 dp 끊을 때 계산 미리미리 했다면 속도 개선 할 수 있을 듯
+    아니면 피보나치 수열하듯이 어떻게든 개선할 수 있을 것...
     '''
     if s[0] == "0": # 0으로 시작하는 경우
         return 0
@@ -71,5 +74,25 @@ s="2263221"
 print(numDecodings(s))
 
 
-
-        
+'''
+류원탁님 dp 풀이
+dp[i]를 정의할때 dp[i]와 dp[i-1]이 어떤 도움을 줄 수 있을까?를 중점적으로 고민했을 때 네 가지 경우가 나왔다
+1. s[i]가 0일 때
+    1-1. s[i-1]과 연속 될 수 있을 때(10, 20): dp[i-2]와 가짓수 동일
+    1-2. s[i-2]과 연속 불가: return 0
+2. s[i]가 0이 아닐 때
+    2-1. 
+    2-2. 
+'''
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        if s[0] == '0': return 0
+        dp = [1] * len(s)
+        for i in range(1, len(s)):
+            if s[i] == '0':
+                if s[i-1] in ['1', '2']: dp[i] = dp[i-2]
+                else: return 0
+            else:
+                if int(s[i-1:i+1]) > 26 or s[i-1] == '0': dp[i] = dp[i-1]
+                else: dp[i] = dp[i-1] + dp[i-2]
+        return dp[-1]

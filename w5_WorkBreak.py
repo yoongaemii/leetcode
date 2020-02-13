@@ -50,8 +50,6 @@ def wordBreak(s, wordDict):
     2. 중간 매칭(i가 0이 아닌 경우)은 의미가 없다. 빠짐없이 연속적으로 매치하는 결과만을 카운트하니 앞에서부터(i고정) 어디까지가 연속적인 매치에 성공했는지만 기록하면 된다.
     Runtime: 52 ms, faster than 16.23% of Python3 online submissions for Word Break. O(NM)
     Memory Usage: 13 MB, less than 94.44% of Python3 online submissions for Word Break. 
-        1) append 할때 어레이 새로 배정하는가?
-        2) s[i:j]로 슬라이싱할때 어레이 새로 배정하는가?
     '''
     dp = [0] # j까지는 연속적으로 채울 수 있다는 뜻임. 여기에 len(s)가 들어와야 함
     for j in range(1,len(s)+1):
@@ -74,3 +72,15 @@ wordDict = ["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaa
 # 길이가 긴 것을 우선 계산?
 
 print(wordBreak(s, wordDict))
+
+
+'''
+DFS 풀이법
+https://leetcode.com/problems/word-break/discuss/428606/Python-Simple-Iterative-BFS-or-DFS-24ms
+
+'''
+
+'''
+장현준님 풀이
+wordDict에서 길이의 min과 max를 저장해서 확인해야하는 경우의 수를 줄였다
+'''
