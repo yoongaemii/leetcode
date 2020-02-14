@@ -52,33 +52,46 @@ def wordBreak(s, wordDict):
     Memory Usage: 13 MB, less than 94.44% of Python3 online submissions for Word Break. 
     '''
     dp = [0] # j까지는 연속적으로 채울 수 있다는 뜻임. 여기에 len(s)가 들어와야 함
-    for j in range(1,len(s)+1):
+    for j in range(1,len(s)+1): # 여기에서 i를 알았다면 start+1 부터 len(s)+1까지만 검사할 수 있었음. 즉, 다음줄에서 s[2:1]과 같은 불필요한 검사를 하고 있다는 뜻. 근데 i는 항상 j보다 작아. j인적이 있었던 놈들만 들어가니까
         if any(s[i:j] in wordDict for i in dp): 
             dp.append(j)
     
     return len(s) in dp
 
-# s = "appleet"
-# wordDict = ["app", "apple", "et"]
-
-# s = "applepenapple"
-# wordDict = ["apple", "pen"]
-
-# s = "catsandog"
-# wordDict = ["cats", "dog", "sand", "and", "cat"]
-
-s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab"
-wordDict = ["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"]
-# 길이가 긴 것을 우선 계산?
-
-print(wordBreak(s, wordDict))
 
 
-'''
-DFS 풀이법
-https://leetcode.com/problems/word-break/discuss/428606/Python-Simple-Iterative-BFS-or-DFS-24ms
+def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+    '''O(N^2)/O(N)'''
+    wordDict, N, dp = set(wordDict), len(s), [True]
+    for i in range(1, N + 1): 
+        dp += any(dp[j] and s[j:i] in wordDict for j in range(i)), # i보다 작은 모든 j에 대하여 dp에 lookup을 해야함
+    return dp[-1]
 
-'''
+
+def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+    '''
+    O(N^2)/O(N)
+    과정 상으로는 별 다를 게 없어 보이는 데 왜 더 빠를까?
+    visited가 dp처럼 중복 업무를 방지하는 역할을 하고 있기 때문? start가 이미 visited이면(즉, 해당 자리까지 만들 수 있다는게 판명이 나면) 그 작업을 건너뛰니까
+    visited의 결과는 for loop 풀이의 dp와 동일함. 
+    여기에서 queue의 효과는 '여기까지는 만들 수 있습니다' 하고 입력하는 부분의 위계와 검사하는 부분의 위계를 분리시켜서 생각했다는 것.
+    아닌가 그냥 더 빨리 종료되기 때문인가?
+    '''
+    wordDict, visited, queue = set(wordDict), [False] * len(s), deque([])
+    queue.append(0)
+    while queue:
+        start = queue.popleft()
+        if not visited[start]:
+            for end in range(start+1, len(s)+1):
+                if s[start:end] in wordDict:
+                    queue.append(end)
+                    if end == len(s): return True
+            visited[start] = True
+    return False
+
+s = "leetcode"
+wordDict = ["leet", "code"]
+wordBreak(s, wordDict)
 
 '''
 장현준님 풀이
