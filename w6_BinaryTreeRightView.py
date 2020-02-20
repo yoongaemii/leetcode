@@ -4,7 +4,7 @@ https://leetcode.com/problems/binary-tree-right-side-view/
 '''
 def rightSideView(root):
     '''
-    BFS using the same 'for _ in range(len(q))' trick in Zigzag. O(n)/
+    BFS using the same 'for _ in range(len(q))' trick in Zigzag. O(n)/O(n)
     Runtime: 28 ms, faster than 82.25% of Python3 online submissions for Binary Tree Right Side View.
     Memory Usage: 12.9 MB, less than 100.00% of Python3 online submissions for Binary Tree Right Side View.
     '''
@@ -46,4 +46,12 @@ def rightSideView(self, root):
     left = self.rightSideView(root.left)
     return [root.val] + right + left[len(right):] # root에 right subtree에서 나온 뷰를 더하고 left subtree가 더 길다면 이를 활용해 뒷부분을 채워준다
 
+
+
+'''
+Python Dictionary Trick
+.setdefault(key, value)는 해당 key의 value를 고정한다. 이 문제에서처럼 오른쪽 뷰를 저장한 다음에 오른쪽에 없던 레벨이었을 때만 딕셔너리를 업데이트 하고자 한다면 효과적
+'''
+rightmost_value_at_depth = dict() # depth -> node.val
+rightmost_value_at_depth.setdefault(depth, node.val)
 

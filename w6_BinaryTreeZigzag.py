@@ -53,7 +53,7 @@ def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
     Memory Usage: 12.8 MB, less than 100.00% of Python3 online submissions for Binary Tree Zigzag Level Order Traversal.
     '''
     out = self.levelOrder(root)
-    return [sublist if i%2==0 else sublist[::-1] for i, sublist in enumerate(out)] # O(depth)/O(depth*sublist개수)
+    return [sublist if i%2==0 else sublist[::-1] for i, sublist in enumerate(out)] 
 
 def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
     '''
@@ -65,6 +65,7 @@ def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
     while q:
         for _ in range(len(q)): # 이 순간에 q 안에 있는 노드만 돌도록
             node = q.popleft()
+            temp.append(node)
             if node.left: q += [node.left]
             if node.right: q += [node.right]
         res+=[temp[::flag]]
@@ -72,3 +73,18 @@ def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
         flag*=-1
     return res
             
+def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
+    '''
+    Recursion
+    depth에 따라 앞에 붙이냐, 뒤에 붙이냐를 달리 한다
+    호출 순서를 보면 왼쪽까지 최대한 내려갔다가 거슬러 올라오며 오른쪽 엣지를 타기 때문에 같은 레벨에 대해서는 왼쪽부터 오른쪽 노드 순서대로 traversal함수가 호출된다
+    '''
+    ans = [[]]
+    def traversal(curr, depth):
+        if len(ans) == depth: ans.append([])
+        if not curr: return
+        ans[depth] = [curr.val] + ans[depth] if depth % 2 else ans[depth] + [curr.val]
+        if curr.left:traversal(curr.left, depth + 1)
+        if curr.right:traversal(curr.right, depth + 1)
+    traversal(root, 0)
+    return root and ans
